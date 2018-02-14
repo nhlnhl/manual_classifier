@@ -19,6 +19,9 @@ namespace Manual_Classifier
         private int max;
         private int idx;
 
+        Dictionary<string, int> result; // result dictionary 
+        string filePath = @"./classifier.out";  // file path to be saved
+
         public Form1()
         {
             InitializeComponent();
@@ -53,6 +56,8 @@ namespace Manual_Classifier
                 Bitmap nowImage2 = new Bitmap(images2[idx].FullName);
                 pb_cam2.Image = nowImage2;
             }
+
+            result = new Dictionary<string, int>();
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -60,17 +65,17 @@ namespace Manual_Classifier
             // Correct (1)
             if(e.KeyCode == Keys.NumPad1)
             {
-                ////////////molar
+                result.Add(images1[idx].FullName, 1);
             }
             // Wrong (2)
             else if(e.KeyCode == Keys.NumPad2)
             {
-
+                result.Add(images1[idx].FullName, 2);
             }
             // Other (3)
             else if(e.KeyCode == Keys.NumPad3)
             {
-
+                result.Add(images1[idx].FullName, 3);
             }
             // Prev (Left Arrow)
             else if(e.KeyCode == Keys.Left)
@@ -118,17 +123,17 @@ namespace Manual_Classifier
 
         private void btn_Correct_Click(object sender, EventArgs e)
         {
-
+            result.Add(images1[idx].FullName, 1);
         }
 
         private void btn_Wrong_Click(object sender, EventArgs e)
         {
-
+            result.Add(images1[idx].FullName, 2);
         }
 
         private void btn_Other_Click(object sender, EventArgs e)
         {
-
+            result.Add(images1[idx].FullName, 3);
         }
 
         private void btn_Prev_Click(object sender, EventArgs e)
@@ -169,7 +174,18 @@ namespace Manual_Classifier
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            using (FileStream fs = new FileStream(filePath, FileMode.Append))
+            {
+                using (TextWriter tw = new StreamWriter(fs))
+                {
+                    foreach (KeyValuePair<string, int> kvp in result)
+                    {
+                        tw.WriteLine(string.Format("{0} {1}", kvp.Key, kvp.Value));
+                    }
+                }
+            }
             // 파일 저장
+
             e.Cancel = true;
         }
     }

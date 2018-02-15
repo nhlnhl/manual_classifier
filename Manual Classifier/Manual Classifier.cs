@@ -26,8 +26,8 @@ namespace Manual_Classifier
         {
             InitializeComponent();
 
-            DirectoryInfo dir1 = new DirectoryInfo(@"폴더경로");
-            DirectoryInfo dir2 = new DirectoryInfo(@"폴더경로");
+            DirectoryInfo dir1 = new DirectoryInfo(@"./cam1");
+            DirectoryInfo dir2 = new DirectoryInfo(@"./cam2");
             
             // 폴더 내 이미지 저장
             FileInfo[] pic1 = dir1.GetFiles("*.jpg", SearchOption.AllDirectories);
@@ -65,17 +65,20 @@ namespace Manual_Classifier
             // Correct (1)
             if(e.KeyCode == Keys.NumPad1)
             {
-                result.Add(images1[idx].FullName, 1);
+                result[images1[idx].FullName] = 1;
+                //result.Add(images1[idx].FullName, 1);
             }
             // Wrong (2)
             else if(e.KeyCode == Keys.NumPad2)
             {
-                result.Add(images1[idx].FullName, 2);
+                result[images1[idx].FullName] = 2;
+                //result.Add(images1[idx].FullName, 2);
             }
             // Other (3)
             else if(e.KeyCode == Keys.NumPad3)
             {
-                result.Add(images1[idx].FullName, 3);
+                result[images1[idx].FullName] = 3;
+                //result.Add(images1[idx].FullName, 3);
             }
             // Prev (Left Arrow)
             else if(e.KeyCode == Keys.Left)
@@ -123,17 +126,20 @@ namespace Manual_Classifier
 
         private void btn_Correct_Click(object sender, EventArgs e)
         {
-            result.Add(images1[idx].FullName, 1);
+            result[images1[idx].FullName] = 1;
+            //result.Add(images1[idx].FullName, 1);
         }
 
         private void btn_Wrong_Click(object sender, EventArgs e)
         {
-            result.Add(images1[idx].FullName, 2);
+            result[images1[idx].FullName] = 2;
+            //result.Add(images1[idx].FullName, 2);
         }
 
         private void btn_Other_Click(object sender, EventArgs e)
         {
-            result.Add(images1[idx].FullName, 3);
+            result[images1[idx].FullName] = 3;
+            //result.Add(images1[idx].FullName, 3);
         }
 
         private void btn_Prev_Click(object sender, EventArgs e)
@@ -180,11 +186,13 @@ namespace Manual_Classifier
                 {
                     foreach (KeyValuePair<string, int> kvp in result)
                     {
-                        tw.WriteLine(string.Format("{0} {1}", kvp.Key, kvp.Value));
+                        int position = kvp.Key.LastIndexOf('\\');
+                        string fileName = kvp.Key.Substring(position + 1);
+                        tw.WriteLine(string.Format("{0} {1}", fileName, kvp.Value));
                     }
                 }
             }
-            // 파일 저장
+            // save the file before quit
 
             e.Cancel = true;
         }

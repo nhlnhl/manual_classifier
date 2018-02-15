@@ -90,6 +90,7 @@ namespace Manual_Classifier
             // file exist
             if (System.IO.File.Exists(filePath))
             {
+                /*
                 string[] lines = System.IO.File.ReadAllLines(filePath);
                 int position = lines[idx].LastIndexOf(' ');
                 string fileName = lines[idx].Substring(0, position);
@@ -98,6 +99,31 @@ namespace Manual_Classifier
                     idx++;
                     position = lines[idx].LastIndexOf(' ');
                     fileName = lines[idx].Substring(0, position);
+                }
+                */
+                
+                for (int i = 0; i < max; i++)
+                {
+                    using (StreamReader sr = new StreamReader(filePath))
+                    {
+                        bool found = false;
+                        while (!sr.EndOfStream)
+                        {
+                            string line = sr.ReadLine();
+                            int position = line.LastIndexOf(' ');
+                            string fileName = line.Substring(0, position);
+                            if (fileName == extractFileName(images1[i].FullName))
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if(!found)
+                        {
+                            idx = i;
+                            break;
+                        }
+                    }
                 }
             }
 

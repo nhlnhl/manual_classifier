@@ -74,7 +74,7 @@ namespace Manual_Classifier
             DirectoryInfo dir1 = new DirectoryInfo(@"./cam1");  // you sould change here based on your developing environment
             DirectoryInfo dir2 = new DirectoryInfo(@"./cam2");  // you sould change here based on your developing environment
 
-            // 폴더 내 이미지 저장
+            // save images in directory
             FileInfo[] pic1 = dir1.GetFiles("*.jpg", SearchOption.AllDirectories);
             FileInfo[] pic2 = dir2.GetFiles("*.jpg", SearchOption.AllDirectories);
 
@@ -84,12 +84,11 @@ namespace Manual_Classifier
             pic1.CopyTo(images1, 0);
             pic2.CopyTo(images2, 0);
 
-            // 변수 값 설정
             max += pic1.Length;
             idx = 0;
 
-            // 분류된 파일 존재
-            if(System.IO.File.Exists(filePath))
+            // file exist
+            if (System.IO.File.Exists(filePath))
             {
                 string[] lines = System.IO.File.ReadAllLines(filePath);
                 int position = lines[idx].LastIndexOf(' ');
@@ -146,7 +145,9 @@ namespace Manual_Classifier
             // Close (ESC)
             else if (e.KeyCode == Keys.Escape)
             {
-                // 파일 저장
+                // save the file before quitting
+
+
                 Application.Exit();
             }
         }
@@ -193,19 +194,44 @@ namespace Manual_Classifier
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // save the file before quitting\
             using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate))
             {
                 using (TextWriter tw = new StreamWriter(fs))
                 {
-                    foreach (KeyValuePair<string, int> kvp in result)
+                    if (System.IO.File.Exists(filePath))
                     {
-                        tw.WriteLine(string.Format("{0} {1}", kvp.Key, kvp.Value));
+                        foreach (KeyValuePair<string, int> kvp in result)
+                        {
+                            using (StreamReader sr = new StreamReader(filePath))
+                            {
+                                string buffer = sr.Read().ToString();
+
+                                while (!sr.EndOfStream)
+                                {
+                                    if (buffer == kvp.Key)
+                                    {
+                                        fs.Seek(kvp.Key.Length, SeekOrigin.Current);
+                                        tw.Write(kvp.Value);
+                                        break;
+                                    }
+                                    fs.Seek(kvp.Key.Length + kvp.Value.ToString().Length, SeekOrigin.Current);
+                                }
+                                tw.WriteLine(string.Format("{0} {1}", kvp.Key, kvp.Value));
+                            }
+                        }
                     }
+                    else
+                    {
+                        foreach (KeyValuePair<string, int> kvp in result)
+                        {
+                            tw.WriteLine(string.Format("{0} {1}", kvp.Key, kvp.Value));
+                        }
+                    }
+
+                    e.Cancel = true;
                 }
             }
-            // save the file before quitting
-
-            e.Cancel = true;
         }
     }
-}
+};

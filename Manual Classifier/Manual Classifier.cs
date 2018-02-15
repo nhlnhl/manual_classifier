@@ -194,7 +194,7 @@ namespace Manual_Classifier
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // save the file before quitting\
+            // save the file before quitting
             using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate))
             {
                 using (TextWriter tw = new StreamWriter(fs))

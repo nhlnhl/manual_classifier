@@ -26,9 +26,9 @@ namespace Manual_Classifier
         {
             InitializeComponent();
 
-            DirectoryInfo dir1 = new DirectoryInfo(@"./cam1");
-            DirectoryInfo dir2 = new DirectoryInfo(@"./cam2");
-            
+            DirectoryInfo dir1 = new DirectoryInfo(@"./cam1");  // you sould change here based on your developing environment
+            DirectoryInfo dir2 = new DirectoryInfo(@"./cam2");  // you sould change here based on your developing environment
+
             // 폴더 내 이미지 저장
             FileInfo[] pic1 = dir1.GetFiles("*.jpg", SearchOption.AllDirectories);
             FileInfo[] pic2 = dir2.GetFiles("*.jpg", SearchOption.AllDirectories);
@@ -188,11 +188,12 @@ namespace Manual_Classifier
                     {
                         int position = kvp.Key.LastIndexOf('\\');
                         string fileName = kvp.Key.Substring(position + 1);
+                        // extract a file name from the dictionary pair's key
                         tw.WriteLine(string.Format("{0} {1}", fileName, kvp.Value));
                     }
                 }
             }
-            // save the file before quit
+            // save the file before quitting
 
             e.Cancel = true;
         }

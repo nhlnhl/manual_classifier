@@ -158,7 +158,7 @@ namespace Manual_Classifier
             // Close (ESC)
             else if (e.KeyCode == Keys.Escape)
             {
-                /* save file */
+                /* save file ! */
                 if (MessageBox.Show("Do you want to exit?", "", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
                     Application.Exit();
@@ -249,7 +249,7 @@ namespace Manual_Classifier
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            /* save file */
+            /* save file ! */
             if(MessageBox.Show("Do you want to exit?", "", MessageBoxButtons.YesNo) == DialogResult.No)
             {
                 e.Cancel = true;

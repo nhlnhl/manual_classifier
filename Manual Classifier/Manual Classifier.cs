@@ -68,6 +68,8 @@ namespace Manual_Classifier
                     }
                 }
             }
+
+            setImage();
         }
 
         // set a pair of images

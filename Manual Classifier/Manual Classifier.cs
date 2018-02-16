@@ -19,7 +19,7 @@ namespace Manual_Classifier
         private int max;
         private int idx;
 
-        Dictionary<string, int> result;         // result dictionary 
+        Dictionary<string, int> result = new Dictionary<string, int>();         // result dictionary 
         string filePath = @"./classifier.out";  // file path to be saved
 
         public Form1()
@@ -41,7 +41,21 @@ namespace Manual_Classifier
             // if result file exists
             if(System.IO.File.Exists(filePath))
             {
-
+                using (StreamReader sr = File.OpenText(filePath))
+                {
+                    string line = String.Empty;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line[line.Length - 1] != '0')
+                        {
+                            idx++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
             }
             // if there is no file
             else
@@ -158,7 +172,35 @@ namespace Manual_Classifier
             // Close (ESC)
             else if (e.KeyCode == Keys.Escape)
             {
-                /* save file ! */
+                using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    int position = 0;   // the position is 0 at first
+                    using (StreamReader sr = new StreamReader(fs))
+                    {
+                        string line = String.Empty;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            int count = line.LastIndexOf(' ');
+                            string name = line;
+                            name = line.Substring(0, count);
+                            // get name from the line
+
+                            if (result.ContainsKey(name))
+                            {
+                                byte[] bytes = BitConverter.GetBytes(result[name]);
+                                fs.Seek(position + name.Length + 1, SeekOrigin.Begin);
+                                // move to the position before writing
+                                fs.Write(bytes, 0, bytes.Length);
+                            }
+
+                            position += line.Length;
+                            position += 2;
+                            // update the position
+                        }
+                    }
+                }
+                // save the file before quitting
+
                 if (MessageBox.Show("Do you want to exit?", "", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
                     Application.Exit();
@@ -249,11 +291,49 @@ namespace Manual_Classifier
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            /* save file ! */
-            if(MessageBox.Show("Do you want to exit?", "", MessageBoxButtons.YesNo) == DialogResult.No)
+            using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                int position = 0;   // the position is 0 at first
+                using (StreamReader sr = new StreamReader(fs))
+                {
+                    string line = String.Empty;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        int count = line.LastIndexOf(' ');
+                        string name = line;
+                        if (count != -1)
+                        {
+                            break;
+                        }
+                        name = line.Substring(0, count);
+                        // get name from the line
+                        
+                        if (result.ContainsKey(name))
+                        {
+                            string str = result[name].ToString();
+                            byte[] bytes = Encoding.ASCII.GetBytes(str);
+                            fs.Seek(position + name.Length + 1, SeekOrigin.Begin);
+                            // move to the position before writing
+                            fs.Write(bytes, 0, bytes.Length);
+                        }
+
+                        position += line.Length;
+                        position += 2;
+                        // update the position
+                    }
+                }
+            }
+            // save the file before quitting
+
+            if (MessageBox.Show("Do you want to exit?", "", MessageBoxButtons.YesNo) == DialogResult.No)
             {
                 e.Cancel = true;
             }
+        }
+
+        private void pb_cam2_Click(object sender, EventArgs e)
+        {
+
         }
     };
 };

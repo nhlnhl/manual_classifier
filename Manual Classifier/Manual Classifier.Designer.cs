@@ -122,7 +122,6 @@
             this.pb_cam2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pb_cam2.TabIndex = 6;
             this.pb_cam2.TabStop = false;
-            this.pb_cam2.Click += new System.EventHandler(this.pb_cam2_Click);
             // 
             // txt_curr
             // 

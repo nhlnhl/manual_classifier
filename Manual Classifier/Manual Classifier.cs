@@ -19,7 +19,7 @@ namespace Manual_Classifier
         private int max;
         private int idx;
 
-        Dictionary<string, int> result = new Dictionary<string, int>();         // result dictionary 
+        Dictionary<string, int> result = new Dictionary<string, int>();     // result dictionary 
         string filePath = @"./classifier.out";  // file path to be saved
 
         public Form1()
@@ -330,11 +330,6 @@ namespace Manual_Classifier
             {
                 e.Cancel = true;
             }
-        }
-
-        private void pb_cam2_Click(object sender, EventArgs e)
-        {
-
         }
     };
 };

@@ -34,7 +34,7 @@ namespace Manual_Classifier
             images2 = dir2.GetFiles("*.jpg", SearchOption.AllDirectories);
 
             max = images1.Length;
-            idx = -1;
+            idx = 0;
 
             txt_total.Text = max.ToString();
 
@@ -305,9 +305,8 @@ namespace Manual_Classifier
                         string name = line;
                         if (count != -1)
                         {
-                            break;
+                            name = line.Substring(0, count);
                         }
-                        name = line.Substring(0, count);
                         // get name from the line
                         
                         if (result.ContainsKey(name))

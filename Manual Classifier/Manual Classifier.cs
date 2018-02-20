@@ -184,12 +184,15 @@ namespace Manual_Classifier
                         {
                             int count = line.LastIndexOf(' ');
                             string name = line;
+                            if (count == -1)
+                                continue;
                             name = line.Substring(0, count);
                             // get name from the line
 
                             if (result.ContainsKey(name))
                             {
-                                byte[] bytes = BitConverter.GetBytes(result[name]);
+                                string str = result[name].ToString();
+                                byte[] bytes = Encoding.ASCII.GetBytes(str);
                                 fs.Seek(position + name.Length + 1, SeekOrigin.Begin);
                                 // move to the position before writing
                                 fs.Write(bytes, 0, bytes.Length);
@@ -303,10 +306,9 @@ namespace Manual_Classifier
                     {
                         int count = line.LastIndexOf(' ');
                         string name = line;
-                        if (count != -1)
-                        {
-                            name = line.Substring(0, count);
-                        }
+                        if (count == -1)
+                            continue;
+                        name = line.Substring(0, count);
                         // get name from the line
                         
                         if (result.ContainsKey(name))
